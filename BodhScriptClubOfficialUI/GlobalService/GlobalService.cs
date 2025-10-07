@@ -146,6 +146,9 @@ namespace BodhScriptClubOfficialUI.GlobalService
                 var fromEmail = "bodhscriptclubofficial@gmail.com";
                 var brevoApiKey = Environment.GetEnvironmentVariable("SENDINBLUE_API_KEY");
 
+                if (string.IsNullOrEmpty(brevoApiKey))
+                    throw new Exception("SENDINBLUE_API_KEY is missing.");
+
                 using var message = new MailMessage();
                 message.From = new MailAddress(fromEmail, "Bodh Script Club");
                 message.To.Add(toEmail);
@@ -155,11 +158,20 @@ namespace BodhScriptClubOfficialUI.GlobalService
 
                 using var client = new SmtpClient("smtp-relay.brevo.com", 587)
                 {
-                    Credentials = new NetworkCredential(fromEmail, brevoApiKey),    
+                    Credentials = new NetworkCredential(fromEmail, brevoApiKey),
                     EnableSsl = true
                 };
 
-                await client.SendMailAsync(message);
+                try
+                {
+                    await client.SendMailAsync(message);
+                }
+                catch (Exception ex)
+                {
+                    // Log full exception
+                    Console.WriteLine($"Mail sending failed: {ex.Message} | {ex.InnerException}");
+                    throw;
+                }
             }
 
 
