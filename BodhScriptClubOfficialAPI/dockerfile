@@ -1,0 +1,24 @@
+﻿# Stage 1: Build the project
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+WORKDIR /src
+
+# Copy csproj and restore dependencies
+COPY ["BodhScriptClubOfficialAPI.csproj", "./"]
+RUN dotnet restore "./BodhScriptClubOfficialAPI.csproj"
+
+# Copy the rest of the project and publish
+COPY . .
+RUN dotnet publish -c Release -o /app/publish
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
+WORKDIR /app
+
+# Copy published files from build stage
+COPY --from=build /app/publish .
+
+# Expose API port
+EXPOSE 5000
+
+# Entry point to run the API
+ENTRYPOINT ["dotnet", "BodhScriptClubOfficialAPI.dll"]

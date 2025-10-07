@@ -1,0 +1,183 @@
+﻿@model BodhScriptClubOfficialUI.Models.Login
+@{
+    Layout = "";
+
+
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BodhScriptClubOfficial</title>
+    <link rel="stylesheet" href="assets/plugins/bootstrap/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        /* Dynamic background animation */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Ubuntu', sans-serif;
+            background: linear-gradient(-45deg, #1a2a6c, #b21f1f, #fdbb2d, #00c6ff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @@keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Transparent header */
+        .transparent-header {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 0;
+            backdrop-filter: blur(5px);
+            animation: slideFadeDown 1s ease forwards;
+        }
+
+            .transparent-header img {
+                height: 80px; /* bigger logo */
+            }
+
+        /* Left profile section */
+        .profile-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: fadeInLeft 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* Right login form */
+        .login-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: fadeInRight 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* Keyframes for fade-in */
+        @@keyframes slideFadeDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @@keyframes fadeInLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @@keyframes fadeInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Adjust widths: left wider */
+        .profile-left {
+            flex: 0 0 60%; /* left 60% width */
+        }
+
+        .login-right {
+            flex: 0 0 40%; /* right 40% width */
+        }
+
+        /* Optional: login card background */
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .profile-left h1, .profile-left h4, .profile-left p {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+
+
+    <section class="login d-flex min-vh-100">
+        <div class="container-fluid h-100">
+            <div class="row h-100">
+
+                <!-- Left Profile -->
+                <div class="col-lg-7 profile-left d-flex flex-column justify-content-center bg-primary text-white p-5">
+                    <h1>Dr. Girish Kumar</h1>
+                    <h4>Associate Professor & Organizer</h4>
+                    <p>
+                        Dr. Girish Kumar holds a Ph.D. in Computer Applications, along with a PGDCA and an MIT, and is currently serving as an Associate Professor at Lovely Professional University. With over 23 years of teaching and research experience in the field of Computer Applications, his core expertise lies in Programming and Software Development, complemented by work in databases, artificial intelligence, networking, and cybersecurity. He has made notable contributions through 24 patents, 10 books in four languages, and over 40 research papers published in reputable national and international journals and conferences, as well as four books by leading publishers. He is also a Certified Academic Associate (IBM–DB2) and an active member of the International Association of Engineers (IAENG).
+                    </p>
+                    <div class="mt-4 text-center">
+                        <img src="~/Images/DrGirish.jpg" alt="Dr. Girish Kumar" class="img-fluid rounded" style="max-height:250px;">
+                    </div>
+                </div>
+
+                <!-- Right Login Form -->
+                <div class="col-lg-5 login-right d-flex align-items-center justify-content-center p-5">
+                    <div class="login-card card-block w-100" style="max-width:400px;">
+                        <form>
+                            <div class="text-center mb-4">
+                                <img src="Images/logo.jpg" alt="logo" style="max-width:200px;">
+                            </div>
+                            <h3 class="text-center txt-primary mb-4">Sign In to your account</h3>
+                            <input type="text" class="form-control mb-3" asp-for=Username placeholder="Enter Username" required>
+                            <input type="password" class="form-control mb-3" asp-for=Password placeholder=" Enter Password" required>
+                            <div class="d-flex justify-content-between mb-3">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-block mb-3" id="btn_Login">LOGIN</button>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script src="assets/plugins/jquery/dist/jquery.min.js"></script>
+    <script src="assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+<script src="js/Login.js"></script>
+

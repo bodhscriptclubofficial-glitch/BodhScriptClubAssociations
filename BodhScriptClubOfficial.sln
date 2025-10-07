@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36221.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BodhScriptClubOfficialUI", "BodhScriptClubOfficialUI", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BodhScriptClubOfficialUI", "BodhScriptClubOfficialUI\BodhScriptClubOfficialUI.csproj", "{9B205007-B8CA-458B-AC73-073A67803D87}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7BA5223A-DE59-4BBE-BF95-69BB27837062} = {7BA5223A-DE59-4BBE-BF95-69BB27837062}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BodhScriptClubOfficialAPI", "BodhScriptClubOfficialAPI", "{2D92109E-E045-44DA-A64D-54C83E03D48B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BodhScriptClubOfficialAPI", "BodhScriptClubOfficialAPI\BodhScriptClubOfficialAPI.csproj", "{7BA5223A-DE59-4BBE-BF95-69BB27837062}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9B205007-B8CA-458B-AC73-073A67803D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B205007-B8CA-458B-AC73-073A67803D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B205007-B8CA-458B-AC73-073A67803D87}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B205007-B8CA-458B-AC73-073A67803D87}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{7BA5223A-DE59-4BBE-BF95-69BB27837062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA5223A-DE59-4BBE-BF95-69BB27837062}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BA5223A-DE59-4BBE-BF95-69BB27837062}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BA5223A-DE59-4BBE-BF95-69BB27837062}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9B205007-B8CA-458B-AC73-073A67803D87} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{7BA5223A-DE59-4BBE-BF95-69BB27837062} = {2D92109E-E045-44DA-A64D-54C83E03D48B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6DD4FA52-14FF-4D06-B413-6DFAE3CC4E7D}
+	EndGlobalSection
+EndGlobal

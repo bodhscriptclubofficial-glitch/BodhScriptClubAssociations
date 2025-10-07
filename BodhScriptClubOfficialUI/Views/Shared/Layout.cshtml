@@ -1,0 +1,457 @@
+﻿
+<html lang="en">
+
+<head>
+
+	
+	<script src="https://unpkg.com/feather-icons"></script>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="description" content="Flash Able Bootstrap admin template made using Bootstrap 4 and it has huge amount of ready made feature, UI components, pages which completely fulfills any dashboard needs." />
+	<meta name="keywords"
+		  content="admin templates, bootstrap admin templates, bootstrap 4, dashboard, dashboard templets, sass admin templets, html admin templates, responsive, bootstrap admin templates free download,premium bootstrap admin templates, Flash Able, Flash Able bootstrap admin template">
+	<meta name="author" content="Codedthemes" />
+
+	<!-- Favicon icon -->
+	<link rel="icon" href="~/assets/images/favicon.ico" type="image/x-icon">
+	<!-- fontawesome icon -->
+	<link rel="stylesheet" href="~/assets/fonts/fontawesome/css/fontawesome-all.min.css">
+	<!-- animation css -->
+	<link rel="stylesheet" href="~/assets/plugins/animation/css/animate.min.css">
+
+	<!-- vendor css -->
+	<link rel="stylesheet" href="~/assets/css/style.css">
+	<style>
+		body {
+			margin: 0;
+			font-family: Inter, system-ui, Arial;
+			background: #f4f6fb;
+			min-height: 100vh;
+		}
+
+		header.navbar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 72px; /* fixed pixel height */
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			padding: 0 1.25rem;
+			z-index: 50;
+			color: white;
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+			border-bottom: 1px solid rgba(255,255,255,0.06);
+			box-shadow: 0 6px 18px rgba(8,10,20,0.25);
+			overflow: hidden;
+		}
+
+
+	/* Animated gradient background (uses background-position animation) */
+	#changeheadercolor {
+	--grad-size: 240% 240%;
+	background: linear-gradient(90deg,
+	#ff6b6b 0%,
+	#ffb86b 20%,
+	#ffd36b 35%,
+	#9be15d 50%,
+	#6bd1ff 70%,
+	#8a6bff 85%,
+	#ff6bb8 100%);
+	background-size: var(--grad-size);
+	transition: box-shadow 300ms ease, transform 300ms ease;
+	animation: gradientShift 12s linear infinite;
+	}
+
+	/* soft glow on top */
+	#changeheadercolor::before{
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	mix-blend-mode: screen;
+	opacity: 0.18;
+	background: radial-gradient(600px 200px at 10% 20%, rgba(255,255,255,0.25), transparent 12%),
+	radial-gradient(400px 160px at 90% 40%, rgba(255,255,255,0.14), transparent 10%);
+	transition: opacity 300ms ease;
+	}
+
+	/* subtle floating motion */
+	@@keyframes floatHeader {
+	0%   { transform: translateY(0px); }
+	50%  { transform: translateY(-3px); }
+	100% { transform: translateY(0px); }
+	}
+
+	/* the main gradient animation (shift background position) */
+	@@keyframes gradientShift {
+	0%   { background-position: 0% 50%; }
+	50%  { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+	}
+
+	/* hover/active styles */
+	#changeheadercolor:hover {
+	box-shadow: 0 10px 30px rgba(12,14,30,0.45);
+	transform: translateY(-2px);
+	animation-duration: 8s; /* speed up on hover */
+	}
+
+	/* class for "paused" or slow state (e.g., when user scrolls) */
+	#changeheadercolor.slow {
+	animation-play-state: running;
+	animation-duration: 30s; /* slow */
+	--glow-opacity: 0.08;
+	}
+	#changeheadercolor.paused {
+	animation-play-state: paused;
+	transform: none;
+	}
+
+	/* small logo / title */
+	.brand { font-weight: 700; letter-spacing: .3px; font-size: 1.05rem; display:flex; align-items:center; gap:.5rem; z-index:3; }
+	.brand .dot {
+	width:12px; height:12px; border-radius:50%;
+	background: rgba(255,255,255,0.95);
+	filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
+	}
+
+	/* nav/action area */
+	nav { margin-left:auto; display:flex; align-items:center; gap:.5rem; z-index:3; }
+	.btn {
+	background: rgba(255,255,255,0.12);
+	color: white;
+	border: 1px solid rgba(255,255,255,0.12);
+	padding: .45rem .6rem;
+	border-radius: .5rem;
+	font-size: .9rem;
+	cursor: pointer;
+	transition: transform 180ms ease, background 180ms ease;
+	}
+	.btn:active { transform: scale(.98); }
+
+	/* prefer-reduced-motion: stop the animation for users who prefer minimal motion */
+	@@media (prefers-reduced-motion: reduce) {
+	#changeheadercolor { animation: none !important; }
+	}
+
+	/* small responsive tweaks */
+	@@media (max-width:640px) {
+	header.navbar { padding: 0 .8rem; height:64px; }
+	.brand { font-size: .95rem; }
+	.btn { font-size: .85rem; padding: .35rem .5rem; }
+	}
+
+	/* content below header so you can scroll and observe effects */
+	main { padding-top: 110px; max-width:980px; margin: 0 auto; }
+	.hero { height: 64vh; display:grid; place-items:center; text-align:center; color:#111; }
+	.card { background: white; border-radius: 12px; padding: 1.25rem; box-shadow: 0 6px 22px rgba(10,12,20,0.06); }
+		/* SIDE PANEL */
+		.side-panel {
+			position: fixed;
+			top: 0;
+			right: -360px;
+			width: 320px;
+			height: 100vh;
+			background: #fff;
+			box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+			transition: right 0.5s cubic-bezier(0.77,0,0.175,1);
+			z-index: 1050;
+			display: flex;
+			flex-direction: column;
+			border-left: 1px solid #eee;
+			border-radius: 8px 0 0 8px;
+		}
+
+			/* Open Panel */
+			.side-panel.open {
+				right: 0;
+			}
+
+			/* PANEL HEADER WITH GRADIENT */
+			.side-panel .pro-head {
+				background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+				color: #fff;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 20px;
+				border-radius: 8px 0 0 0;
+			}
+
+		/* USER INFO */
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.avatar-ring {
+			position: relative;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			padding: 3px;
+			background: linear-gradient(45deg, #ff6a00, #ee0979);
+		}
+
+			.avatar-ring img {
+				width: 100%;
+				height: 100%;
+				border-radius: 50%;
+				display: block;
+			}
+
+		/* CLOSE BUTTON */
+		.close-btn {
+			background: none;
+			border: none;
+			color: #fff;
+			font-size: 1.2rem;
+			cursor: pointer;
+			transition: transform 0.2s;
+		}
+
+			.close-btn:hover {
+				transform: rotate(90deg);
+			}
+
+		/* MENU ITEMS */
+		.pro-body {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			flex: 1;
+			overflow-y: auto;
+		}
+
+			.pro-body li {
+				border-bottom: 1px solid #f0f0f0;
+			}
+
+			.pro-body a {
+				display: flex;
+				align-items: center;
+				padding: 14px 20px;
+				color: #333;
+				font-weight: 500;
+				text-decoration: none;
+				transition: all 0.3s;
+				border-radius: 8px;
+			}
+
+				.pro-body a i {
+					margin-right: 12px;
+					color: #2575fc;
+					transition: transform 0.3s;
+				}
+
+				.pro-body a:hover {
+					background: #2575fc;
+					color: #fff;
+				}
+
+					.pro-body a:hover i {
+						transform: scale(1.2) rotate(10deg);
+					}
+
+		/* OVERLAY */
+		.overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(0,0,0,0.45);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.3s ease;
+			z-index: 1040;
+		}
+
+			.overlay.show {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+
+	</style>
+</head>
+
+<body class="">
+	<!-- [ Pre-loader ] start -->
+	<div class="loader-bg">
+		<div class="loader-track">
+			<div class="loader-fill"></div>
+		</div>
+	</div>
+	<!-- [ Pre-loader ] End -->
+	<!-- [ navigation menu ] start -->
+	<nav class="pcoded-navbar menupos-fixed menu-light brand-blue ">
+		<div class="navbar-wrapper ">
+			<div class="navbar-brand header-logo">
+				<a href="index.html" class="b-brand">
+
+					<img src="~/Images/logo.jpg" alt="" style="height:60px;width:50px">
+				</a>
+				<a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
+			</div>
+			<div class="navbar-content scroll-div">
+				<ul class="nav pcoded-inner-navbar">
+					<li class="nav-item pcoded-menu-caption">
+						<h3>Menu </h3>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Home" asp-action="DashBoard" class="nav-link"><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">DashBoard</span></a>
+					</li>
+					<li class="nav-item">
+						<a asp-controller="Member" asp-action="Index" class="nav-link"><span class="pcoded-micon"><i class="feather icon-home"></i></span><span class="pcoded-mtext">Members</span></a>
+					</li>
+					
+				</ul>
+				
+			</div>
+		</div>
+	</nav>	<!-- [ navigation menu ] end -->
+	<!-- [ Header ] start -->
+	<header class="navbar pcoded-header navbar-expand-lg navbar-light headerpos-fixed" id="changeheadercolor">
+		<div class="m-header">
+			<a class="mobile-menu" id="mobile-collapse1" href="#!"><span></span></a>
+			<a href="index.html" class="b-brand">
+				<img src="~/assets/images/logo.svg" alt="" class="logo images">
+				<img src="~/assets/images/logo-icon.svg" alt="" class="logo-thumb images">
+			</a>
+		</div>
+		<a class="mobile-menu" id="mobile-header" href="#!">
+			<i class="feather icon-more-horizontal"></i>
+		</a>
+		<div class="collapse navbar-collapse">
+			<a href="#!" class="mob-toggler"></a>
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a href="#" class="nav-link" id="settingsIcon" title="User Settings">
+						
+					</a>
+				</li>
+			</ul>
+
+		</div>
+	</header>
+
+	
+	<!-- [ Header ] end -->
+	<!-- [ Main Content ] start -->
+	<div class="pcoded-main-container">
+		@RenderBody();
+
+		<div class="pcoded-wrapper">
+			<div class="pcoded-content">
+				<div class="pcoded-inner-content">
+					<div class="main-body">
+						<div class="page-wrapper">
+							<!-- [ breadcrumb ] start -->
+							<div class="page-header">
+								<div class="page-block">
+									<div class="row align-items-center">
+										<div class="col-md-12">
+											<div class="page-header-title">
+												<h5>Home</h5>
+											</div>
+											<ul class="breadcrumb">
+												<li class="breadcrumb-item"><a href="index.html"><i class="feather icon-home"></i></a></li>
+												<li class="breadcrumb-item"><a href="#!">Analytics Dashboard</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- [ Main Content ] end -->
+	<!-- Warning Section start -->
+	<!-- Older IE warning message -->
+	<!--[if lt IE 11]>
+		<div class="ie-warning">
+			<h1>Warning!!</h1>
+			<p>You are using an outdated version of Internet Explorer, please upgrade
+			   <br/>to any of the following web browsers to access this website.
+			</p>
+			<div class="iew-container">
+				<ul class="iew-download">
+					<li>
+						<a href="http://www.google.com/chrome/">
+							<img src="../assets/images/browser/chrome.png" alt="Chrome">
+							<div>Chrome</div>
+						</a>
+					</li>
+					<li>
+						<a href="https://www.mozilla.org/en-US/firefox/new/">
+							<img src="../assets/images/browser/firefox.png" alt="Firefox">
+							<div>Firefox</div>
+						</a>
+					</li>
+					<li>
+						<a href="http://www.opera.com">
+							<img src="../assets/images/browser/opera.png" alt="Opera">
+							<div>Opera</div>
+						</a>
+					</li>
+					<li>
+						<a href="https://www.apple.com/safari/">
+							<img src="../assets/images/browser/safari.png" alt="Safari">
+							<div>Safari</div>
+						</a>
+					</li>
+					<li>
+						<a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie">
+							<img src="../assets/images/browser/ie.png" alt="">
+							<div>IE (11 & above)</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<p>Sorry for the inconvenience!</p>
+		</div>
+	<![endif]-->
+	<!-- Warning Section Ends -->
+	<!-- Required Js -->
+	<script src="~/assets/js/vendor-all.min.js"></script>
+	<script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+	<script src="~/assets/js/pcoded.min.js"></script>
+
+	<script>
+		feather.replace();
+
+	    const sidePanel = document.getElementById('sidePanel');
+		const overlay = document.getElementById('overlay');
+		const openBtn = document.getElementById('settingsIcon');
+		const closeBtn = document.getElementById('closePanel');
+
+		openBtn.addEventListener('click', (e) => {
+			e.preventDefault();
+			sidePanel.classList.add('open');
+			overlay.classList.add('show');
+		});
+
+		closeBtn.addEventListener('click', () => {
+			sidePanel.classList.remove('open');
+			overlay.classList.remove('show');
+		});
+
+		overlay.addEventListener('click', () => {
+			sidePanel.classList.remove('open');
+			overlay.classList.remove('show');
+		});
+
+	</script>
+	@RenderSection("Scripts", required: false)
+
+</body>
+
+</html>

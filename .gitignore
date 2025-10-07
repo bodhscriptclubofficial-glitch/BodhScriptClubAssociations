@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+
+# SQL Server local database files
+*.mdf
+*.ldf
+# AppSettings Development file (contains secrets)
+appsettings.Development.json
+
+# Docker-related
+docker-compose.override.yml
