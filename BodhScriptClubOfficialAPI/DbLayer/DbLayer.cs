@@ -109,19 +109,32 @@ namespace BodhScriptClubOfficialAPI.DbLayer
         }
 
         // Executes a stored procedure that returns rows
-        public DataTable ExecuteProcedure(string procName, string[] paramNames, object[] paramValues)
+        public DataTable ExecuteProcedure(string funcName, string[] paramNames, object[] paramValues)
         {
             DataTable dt = new DataTable();
             using var con = new NpgsqlConnection(_connectionString);
-            using var cmd = new NpgsqlCommand(procName, con)
+
+            // Build parameter placeholders
+            string paramPlaceholders = "";
+            if (paramNames != null && paramValues != null && paramNames.Length == paramValues.Length)
             {
-                CommandType = CommandType.StoredProcedure
+                var placeholders = paramNames.Select((p, i) => $"@{p}");
+                paramPlaceholders = string.Join(", ", placeholders);
+            }
+
+            string sql = $"SELECT * FROM {funcName}({paramPlaceholders});";
+
+            using var cmd = new NpgsqlCommand(sql, con)
+            {
+                CommandType = CommandType.Text
             };
 
             if (paramNames != null && paramValues != null && paramNames.Length == paramValues.Length)
             {
                 for (int i = 0; i < paramNames.Length; i++)
+                {
                     cmd.Parameters.AddWithValue(paramNames[i], paramValues[i] ?? DBNull.Value);
+                }
             }
 
             using var da = new NpgsqlDataAdapter(cmd);
@@ -129,6 +142,7 @@ namespace BodhScriptClubOfficialAPI.DbLayer
 
             return dt;
         }
+
 
         private string BuildFunctionQuery(string funcName, string[] paramNames)
         {

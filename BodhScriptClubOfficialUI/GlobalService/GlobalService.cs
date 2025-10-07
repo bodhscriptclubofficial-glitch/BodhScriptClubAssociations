@@ -155,7 +155,7 @@ namespace BodhScriptClubOfficialUI.GlobalService
 
                 using var client = new SmtpClient("smtp-relay.brevo.com", 587)
                 {
-                    Credentials = new NetworkCredential(fromEmail, brevoApiKey),
+                    Credentials = new NetworkCredential(fromEmail, brevoApiKey),    
                     EnableSsl = true
                 };
 
