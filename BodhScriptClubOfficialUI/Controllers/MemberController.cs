@@ -103,30 +103,25 @@ namespace BodhScriptClubOfficialUI.Controllers
                 string output = await _serviceDeclare.GetByIdMethod(BaseUrl, Urlparameters, Memberid);
 
                 if (string.IsNullOrEmpty(output))
-                {
                     return NotFound("Member not found.");
-                }
 
-                var members = JsonSerializer.Deserialize<List<Member>>(output, new JsonSerializerOptions
+                // ✅ Deserialize single object instead of list
+                var member = JsonSerializer.Deserialize<Member>(output, new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 });
 
-                var member = members.FirstOrDefault();
-
                 if (member == null)
-                {
                     return NotFound("Member not found.");
-                }
 
                 return Ok(member);
             }
             catch (Exception ex)
             {
-                // Optional: log ex.Message for debugging
                 return StatusCode(500, $"Error fetching member: {ex.Message}");
             }
         }
+
 
         [HttpPost]
         public async Task <JsonResult> Delete(Member member)
