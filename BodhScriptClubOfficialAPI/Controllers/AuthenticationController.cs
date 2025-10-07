@@ -149,10 +149,13 @@ namespace BodhScriptClubOfficialAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly Repo _repo;
+        private readonly EmailServicecs _emailService;
 
         public AuthenticationController(Repo repo)
         {
             _repo = repo;
+            _emailService = new EmailServicecs(); // instantiate the service
+
         }
 
         // ===================== LOGIN =====================
@@ -168,7 +171,7 @@ namespace BodhScriptClubOfficialAPI.Controllers
 
         // ===================== SAVE/UPDATE MEMBER =====================
         [HttpPost("Members")]
-        public IActionResult Members([FromForm] Member g1)
+        public async Task<IActionResult> Members([FromForm] Member g1)
         {
             try
             {
@@ -176,7 +179,7 @@ namespace BodhScriptClubOfficialAPI.Controllers
                     return BadRequest("Invalid request: member is null");
 
                 // Handle file upload
-                if (g1.PictureFile != null)
+                if (g1.PictureFile != null && g1.PictureFile.Length > 0)
                 {
                     string uiRoot = Path.Combine(
                         Directory.GetParent(Directory.GetCurrentDirectory()).FullName,
@@ -193,20 +196,34 @@ namespace BodhScriptClubOfficialAPI.Controllers
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        g1.PictureFile.CopyTo(stream);
+                        await g1.PictureFile.CopyToAsync(stream);
                     }
 
                     g1.MemberPicture = "/MembersImage/" + fileName;
                 }
 
+                // Save or update member
                 int result = _repo.SaveUpdateMembers(g1);
-                return Ok(result);
+                g1.Memberid = result;
+
+                // Send email only for new member
+                if (g1.Memberid == 0)
+                {
+                    await _emailService.SendEmailAsync(
+                        g1.MemberemailId,
+                        "Member Updated",
+                        $"Hello {g1.Membername},<br/>Your member record has been saved successfully. Welcome To BodhScriptClub."
+                    );
+                }
+
+                return Ok(new { success = true, memberId = result, picturePath = g1.MemberPicture });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, new { success = false, message = ex.Message });
             }
         }
+
 
         // ===================== GET ALL MEMBERS =====================
         [HttpGet("GetAllMembers")]
@@ -215,6 +232,7 @@ namespace BodhScriptClubOfficialAPI.Controllers
             try
             {
                 var members = _repo.FetchAllMembers() ?? new List<Member>();
+
                 return Ok(members);
             }
             catch (Exception)

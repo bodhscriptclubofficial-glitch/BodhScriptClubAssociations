@@ -83,11 +83,7 @@ namespace BodhScriptClubOfficialUI.Controllers
 
                 // Call your service with member data and file (if any)
                 var output = await _serviceDeclare.PostAsync(member, BaseUrl, "Members", member.PictureFile);
-                if (member.Memberid==0 || member.Memberid==null)
-                {
-                    await _serviceDeclare.SendEmailAsync(member.MemberemailId, "Member Updated",
-                        $"Hello {member.Membername},<br/>Your member record has been saved successfully.Welcome To BodhScriptClub.");
-                }
+                
 
                 return Json(new { success = output != "0", picturePath = imagePath });
             }
