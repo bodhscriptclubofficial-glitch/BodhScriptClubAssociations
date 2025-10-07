@@ -1,5 +1,5 @@
 ﻿# Stage 1: Build
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy csproj and restore dependencies
@@ -11,7 +11,7 @@ COPY . .
 RUN dotnet publish -c Release -o /app/publish
 
 # Stage 2: Runtime
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 
 # Copy published files
@@ -19,6 +19,9 @@ COPY --from=build /app/publish .
 
 # Expose default HTTP port
 EXPOSE 80
+
+# Make sure Render can route traffic
+ENV ASPNETCORE_URLS=http://+:$PORT
 
 # Entry point
 ENTRYPOINT ["dotnet", "BodhScriptClubOfficialUI.dll"]
