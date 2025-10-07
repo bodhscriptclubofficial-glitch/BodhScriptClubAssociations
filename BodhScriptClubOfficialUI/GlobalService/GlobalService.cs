@@ -143,22 +143,8 @@ namespace BodhScriptClubOfficialUI.GlobalService
 
             public override async Task SendEmailAsync(string toEmail, string subject, string body)
             {
-                // Read the Brevo (Sendinblue) SMTP key from environment variable
-                var smtpPassword = Environment.GetEnvironmentVariable("SENDINBLUE_API_KEY");
-                if (string.IsNullOrEmpty(smtpPassword))
-                {
-                    throw new InvalidOperationException("Brevo API key not found. Set the SENDINBLUE_API_KEY environment variable.");
-                }
-
-                // Read other SMTP settings from configuration
-                var fromEmail = _configuration["SmtpSettings:Email"];
-                var host = _configuration["SmtpSettings:Host"];
-
-                // Safe port parsing
-                if (!int.TryParse(_configuration["SmtpSettings:Port"], out int port))
-                {
-                    port = 587; // default SMTP port
-                }
+                var fromEmail = "bodhscriptclubofficial@gmail.com";
+                var brevoApiKey = Environment.GetEnvironmentVariable("SENDINBLUE_API_KEY");
 
                 using var message = new MailMessage();
                 message.From = new MailAddress(fromEmail, "Bodh Script Club");
@@ -167,9 +153,9 @@ namespace BodhScriptClubOfficialUI.GlobalService
                 message.Body = body;
                 message.IsBodyHtml = true;
 
-                using var client = new SmtpClient(host, port)
+                using var client = new SmtpClient("smtp-relay.brevo.com", 587)
                 {
-                    Credentials = new NetworkCredential(fromEmail, smtpPassword),
+                    Credentials = new NetworkCredential(fromEmail, brevoApiKey),
                     EnableSsl = true
                 };
 
