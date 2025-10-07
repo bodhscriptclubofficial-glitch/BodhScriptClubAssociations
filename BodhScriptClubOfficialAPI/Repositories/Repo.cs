@@ -172,22 +172,37 @@ namespace BodhScriptClubOfficialAPI.Repositories
 {
     public class Repo
     {
-        private readonly BodhScriptClubOfficialAPI.DbLayer.DbLayer _dbLayer;
+        private readonly  BodhScriptClubOfficialAPI.DbLayer.DbLayer _dbLayer;
 
         public Repo(BodhScriptClubOfficialAPI.DbLayer.DbLayer dbLayer)
         {
             _dbLayer = dbLayer;
         }
 
-        // Login authentication using PostgreSQL function
+        /// <summary>
+        /// Login authentication using PostgreSQL function
+        /// </summary>
         public int Authentication(Logincs logincs)
         {
-            string[] paramNames = { "p_Username", "p_Password" };
-            string[] paramValues = { logincs.Username, logincs.Password };
-            return _dbLayer.ExecuteFunction("sp_bodhscript_credentials", paramNames, paramValues);
+            string[] paramNames = { "p_username", "p_password" };
+            string[] paramValues = { logincs.Username?.Trim(), logincs.Password?.Trim() };
+
+            try
+            {
+                int result = _dbLayer.ExecuteFunction("sp_bodhscript_credentials", paramNames, paramValues);
+                Console.WriteLine($"Login attempt for {logincs.Username}, Result: {result}");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Login error: {ex.Message}");
+                return 0; // treat errors as failed login
+            }
         }
 
-        // Save or update members
+        /// <summary>
+        /// Save or update members
+        /// </summary>
         public int SaveUpdateMembers(Member members)
         {
             string[] paramNames = { "p_Rectype", "p_MemberId", "p_MemberName", "p_MemberStream", "p_MemberSession", "p_MemberRollNo", "p_MembersEmailId", "p_MemberContactNo", "p_MembersImage" };
@@ -195,7 +210,9 @@ namespace BodhScriptClubOfficialAPI.Repositories
             return _dbLayer.ExecuteFunction("sp_members", paramNames, paramValues);
         }
 
-        // Fetch all members
+        /// <summary>
+        /// Fetch all members
+        /// </summary>
         public List<Member> FetchAllMembers()
         {
             string[] paramNames = { "p_Rectype", "p_Id" };
@@ -222,14 +239,19 @@ namespace BodhScriptClubOfficialAPI.Repositories
             return members;
         }
 
-        // Delete member
+        /// <summary>
+        /// Delete member
+        /// </summary>
         public int Delete(Member member)
         {
             string[] paramNames = { "p_Rectype", "p_Id" };
             object[] paramValues = { "Delete", member.Memberid };
             return _dbLayer.ExecuteProcedure("sp_fetch", paramNames, paramValues).Rows.Count;
         }
-        // Fetch member by ID
+
+        /// <summary>
+        /// Fetch member by ID
+        /// </summary>
         public Member FetchMemberById(int id)
         {
             string[] paramNames = { "p_Rectype", "p_Id" };
@@ -253,7 +275,10 @@ namespace BodhScriptClubOfficialAPI.Repositories
                 MemberPicture = row["MembersImage"].ToString()
             };
         }
-        // Get total member count
+
+        /// <summary>
+        /// Get total member count
+        /// </summary>
         public int GetTotalMembersCount()
         {
             try
@@ -275,8 +300,9 @@ namespace BodhScriptClubOfficialAPI.Repositories
                 return 0;
             }
         }
-
-
     }
+
+    
 }
+
 

@@ -76,6 +76,8 @@
 using Npgsql;
 using System;
 using System.Data;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace BodhScriptClubOfficialAPI.DbLayer
 {
@@ -88,7 +90,9 @@ namespace BodhScriptClubOfficialAPI.DbLayer
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        // Executes a function that returns a single scalar value
+        /// <summary>
+        /// Executes a PostgreSQL function that returns a single scalar value (int)
+        /// </summary>
         public int ExecuteFunction(string funcName, string[] paramNames, string[] paramValues)
         {
             using var con = new NpgsqlConnection(_connectionString);
@@ -101,28 +105,31 @@ namespace BodhScriptClubOfficialAPI.DbLayer
 
             for (int i = 0; i < paramNames.Length; i++)
             {
-                cmd.Parameters.AddWithValue(paramNames[i], paramValues[i] );
+                // Ensure @ prefix for Npgsql
+                cmd.Parameters.AddWithValue("@" + paramNames[i], paramValues[i]);
             }
 
             con.Open();
-            return Convert.ToInt32(cmd.ExecuteScalar());
+            var result = cmd.ExecuteScalar();
+            return Convert.ToInt32(result);
         }
 
-        // Executes a stored procedure that returns rows
-        public DataTable ExecuteProcedure(string funcName, string[] paramNames, object[] paramValues)
+        /// <summary>
+        /// Executes a stored procedure or function that returns rows
+        /// </summary>
+        public DataTable ExecuteProcedure(string procName, string[] paramNames, object[] paramValues)
         {
             DataTable dt = new DataTable();
             using var con = new NpgsqlConnection(_connectionString);
 
-            // Build parameter placeholders
             string paramPlaceholders = "";
             if (paramNames != null && paramValues != null && paramNames.Length == paramValues.Length)
             {
-                var placeholders = paramNames.Select((p, i) => $"@{p}");
+                var placeholders = paramNames.Select(p => "@" + p);
                 paramPlaceholders = string.Join(", ", placeholders);
             }
 
-            string sql = $"SELECT * FROM {funcName}({paramPlaceholders});";
+            string sql = $"SELECT * FROM {procName}({paramPlaceholders});";
 
             using var cmd = new NpgsqlCommand(sql, con)
             {
@@ -133,7 +140,7 @@ namespace BodhScriptClubOfficialAPI.DbLayer
             {
                 for (int i = 0; i < paramNames.Length; i++)
                 {
-                    cmd.Parameters.AddWithValue(paramNames[i], paramValues[i] ?? DBNull.Value);
+                    cmd.Parameters.AddWithValue("@" + paramNames[i], paramValues[i] ?? DBNull.Value);
                 }
             }
 
@@ -143,12 +150,18 @@ namespace BodhScriptClubOfficialAPI.DbLayer
             return dt;
         }
 
-
+        /// <summary>
+        /// Builds the SQL query for calling a function with parameters
+        /// </summary>
         private string BuildFunctionQuery(string funcName, string[] paramNames)
         {
-            // Builds: SELECT funcName(@p1, @p2, ...)
             return $"SELECT {funcName}({string.Join(", ", paramNames.Select(p => "@" + p))})";
         }
+
+       
     }
+
+    
 }
+
 
