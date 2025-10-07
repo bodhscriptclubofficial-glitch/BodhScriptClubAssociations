@@ -87,8 +87,16 @@ namespace BodhScriptClubOfficialAPI.DbLayer
 
         public DbLayer(IConfiguration configuration)
         {
+            // Try from appsettings.json first
             _connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            // If not found (like in Render), try environment variable directly
+            if (string.IsNullOrEmpty(_connectionString))
+            {
+                _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+            }
         }
+
 
         /// <summary>
         /// Executes a PostgreSQL function that returns a single scalar value (int)
