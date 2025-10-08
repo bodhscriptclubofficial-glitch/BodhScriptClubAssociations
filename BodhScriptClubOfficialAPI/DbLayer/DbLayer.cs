@@ -77,8 +77,7 @@ using Npgsql;
 using System;
 using System.Data;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
-
+using System.Linq; // required for .Select()
 namespace BodhScriptClubOfficialAPI.DbLayer
 {
     public class DbLayer

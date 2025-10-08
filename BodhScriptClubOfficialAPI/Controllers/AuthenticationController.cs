@@ -149,7 +149,7 @@ namespace BodhScriptClubOfficialAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly Repo _repo;
-        private readonly EmailServicecs _emailService;
+        private readonly BodhScriptClubOfficialAPI.Repositories.EmailServicecs _emailService;
 
         public AuthenticationController(Repo repo)
         {

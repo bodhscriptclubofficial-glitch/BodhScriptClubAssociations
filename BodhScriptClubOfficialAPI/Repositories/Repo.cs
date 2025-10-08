@@ -172,7 +172,7 @@ namespace BodhScriptClubOfficialAPI.Repositories
 {
     public class Repo
     {
-        private readonly  BodhScriptClubOfficialAPI.DbLayer.DbLayer _dbLayer;
+        private readonly BodhScriptClubOfficialAPI.DbLayer.DbLayer _dbLayer;
 
         public Repo(BodhScriptClubOfficialAPI.DbLayer.DbLayer dbLayer)
         {
