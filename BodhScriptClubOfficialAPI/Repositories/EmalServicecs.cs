@@ -1,59 +1,50 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BodhScriptClubOfficialAPI.Repositories
 {
     public class EmailServicecs
     {
-        public async Task SendEmailAsync(string toEmail, string subject, string body)
+        private readonly string _apiKey;
+
+        public EmailServicecs()
         {
-            if (string.IsNullOrWhiteSpace(toEmail))
-                throw new ArgumentException("Recipient email is required", nameof(toEmail));
+            _apiKey = Environment.GetEnvironmentVariable("BREVO_SMTP_KEY"); // same key works for API
+            if (string.IsNullOrWhiteSpace(_apiKey))
+                throw new InvalidOperationException("BREVO_SMTP_KEY environment variable not set.");
+        }
 
-            // Get environment variables
-            var fromEmail = Environment.GetEnvironmentVariable("BREVO_SMTP_LOGIN");
-            var smtpKey = Environment.GetEnvironmentVariable("BREVO_SMTP_KEY");
+        public async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
+        {
+            var fromEmail = Environment.GetEnvironmentVariable("BREVO_SMTP_LOGIN") ?? "98bbef002@smtp-brevo.com";
 
-            if (string.IsNullOrWhiteSpace(fromEmail))
-                throw new InvalidOperationException("Environment variable 'BREVO_SMTP_LOGIN' is not set.");
-            if (string.IsNullOrWhiteSpace(smtpKey))
-                throw new InvalidOperationException("Environment variable 'BREVO_SMTP_KEY' is not set.");
-
-            using var message = new MailMessage
+            var payload = new
             {
-                From = new MailAddress(fromEmail, "Bodh Script Club"),
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = true
+                sender = new { name = "Bodh Script Club", email = fromEmail },
+                to = new[] { new { email = toEmail } },
+                subject = subject,
+                htmlContent = htmlBody
             };
 
-            message.To.Add(toEmail);
+            using var http = new HttpClient();
+            http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("api-key", _apiKey);
+            http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            using var client = new SmtpClient("smtp-relay.brevo.com", 587)
-            {
-                Credentials = new NetworkCredential(fromEmail, smtpKey),
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network
-            };
+            var json = JsonConvert.SerializeObject(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            try
-            {
-                Console.WriteLine($"Sending email from '{fromEmail}' to '{toEmail}'...");
-                await client.SendMailAsync(message);
+            var response = await http.PostAsync("https://api.brevo.com/v3/smtp/email", content);
+
+            if (response.IsSuccessStatusCode)
                 Console.WriteLine("✅ Email sent successfully!");
-            }
-            catch (SmtpException smtpEx)
-            {
-                Console.WriteLine($"❌ SMTP Error: {smtpEx.StatusCode} - {smtpEx.Message}");
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ General Error: {ex.Message}");
-                throw;
-            }
+            else
+                Console.WriteLine($"❌ Email send failed: {response.StatusCode} - {await response.Content.ReadAsStringAsync()}");
         }
     }
+
 }
