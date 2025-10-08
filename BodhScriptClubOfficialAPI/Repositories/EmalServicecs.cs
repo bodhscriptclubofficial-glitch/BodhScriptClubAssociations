@@ -11,12 +11,8 @@ namespace BodhScriptClubOfficialAPI.Repositories
         {
             if (string.IsNullOrWhiteSpace(toEmail))
                 throw new ArgumentException("Recipient email is required", nameof(toEmail));
-
-            var fromEmail = "bodhscriptclubofficial@gmail.com"; // verified Brevo email
-            var brevoApiKey = Environment.GetEnvironmentVariable("SENDINBLUE_API_KEY");
-
-            if (string.IsNullOrEmpty(brevoApiKey))
-                throw new InvalidOperationException("SENDINBLUE_API_KEY environment variable is not set.");
+            var fromEmail = Environment.GetEnvironmentVariable("BREVO_SMTP_LOGIN");
+            var smtpKey = Environment.GetEnvironmentVariable("BREVO_SMTP_KEY");
 
             using var message = new MailMessage
             {
@@ -30,9 +26,11 @@ namespace BodhScriptClubOfficialAPI.Repositories
 
             using var client = new SmtpClient("smtp-relay.brevo.com", 587)
             {
-                Credentials = new NetworkCredential(fromEmail, brevoApiKey),
+                Credentials = new NetworkCredential(fromEmail, smtpKey),
                 EnableSsl = true
             };
+
+
 
             await client.SendMailAsync(message);
         }
