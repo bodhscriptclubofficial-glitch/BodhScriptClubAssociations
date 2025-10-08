@@ -15,8 +15,8 @@ namespace BodhScriptClubOfficialAPI.Repositories
 
         public EmailServicecs()
         {
-            _apiKey = Environment.GetEnvironmentVariable("BREVO_SMTP_KEY")
-                      ?? throw new InvalidOperationException("BREVO_SMTP_KEY environment variable not set.");
+            _apiKey = Environment.GetEnvironmentVariable("SENDINBLUE_API_KEY")
+                      ?? throw new InvalidOperationException("SENDINBLUE_API_KEY environment variable not set.");
             _fromEmail = Environment.GetEnvironmentVariable("BREVO_SMTP_LOGIN")
                          ?? "98bbef002@smtp-brevo.com"; // fallback if env not set
         }
