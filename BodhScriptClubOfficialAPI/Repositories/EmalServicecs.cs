@@ -10,48 +10,42 @@ namespace BodhScriptClubOfficialAPI.Repositories
 {
     public class EmailServicecs
     {
-        private readonly string _apiKey;
         private readonly string _fromEmail;
+        private readonly string _appPassword;
 
         public EmailServicecs()
         {
-            _apiKey = Environment.GetEnvironmentVariable("SENDINBLUE_API_KEY")
-                      ?? throw new InvalidOperationException("SENDINBLUE_API_KEY environment variable not set.");
-            _fromEmail = Environment.GetEnvironmentVariable("BREVO_SMTP_LOGIN")
-                         ?? "98bbef002@smtp-brevo.com"; // fallback if env not set
+            _fromEmail = Environment.GetEnvironmentVariable("GMAIL_EMAIL")
+                         ?? "bodhscriptclubofficial@gmail.com";
+            _appPassword = Environment.GetEnvironmentVariable("GMAIL_APP_PASSWORD")
+                           ?? throw new InvalidOperationException("GMAIL_APP_PASSWORD not set");
         }
 
-        public async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
+        public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
             if (string.IsNullOrWhiteSpace(toEmail))
                 throw new ArgumentException("Recipient email is required", nameof(toEmail));
 
-            var payload = new
+            using var message = new MailMessage
             {
-                sender = new { name = "Bodh Script Club", email = _fromEmail },
-                to = new[] { new { email = toEmail } },
-                subject = subject,
-                htmlContent = htmlBody
+                From = new MailAddress(_fromEmail, "Bodh Script Club"),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
             };
 
-            var json = JsonConvert.SerializeObject(payload);
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("api-key", _apiKey);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            message.To.Add(toEmail);
+
+            using var client = new SmtpClient("smtp.gmail.com", 587)
+            {
+                Credentials = new NetworkCredential(_fromEmail, _appPassword),
+                EnableSsl = true
+            };
 
             try
             {
-                var response = await client.PostAsync("https://api.brevo.com/v3/smtp/email", content);
-                if (response.IsSuccessStatusCode)
-                {
-                    Console.WriteLine($"✅ Email sent to {toEmail}");
-                }
-                else
-                {
-                    var respText = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"❌ Email failed: {response.StatusCode} - {respText}");
-                }
+                await client.SendMailAsync(message);
+                Console.WriteLine($"✅ Email sent to {toEmail}");
             }
             catch (Exception ex)
             {
