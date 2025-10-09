@@ -140,6 +140,7 @@ using BodhScriptClubOfficialAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 
 namespace BodhScriptClubOfficialAPI.Controllers
@@ -151,10 +152,10 @@ namespace BodhScriptClubOfficialAPI.Controllers
         private readonly Repo _repo;
         private readonly BodhScriptClubOfficialAPI.Repositories.EmailServicecs _emailService;
 
-        public AuthenticationController(Repo repo)
+        public AuthenticationController(Repo repo, IConfiguration configuration)
         {
             _repo = repo;
-            _emailService = new EmailServicecs(); // instantiate the service
+            _emailService = new EmailServicecs(configuration); // ✅ pass IConfiguration
 
         }
 

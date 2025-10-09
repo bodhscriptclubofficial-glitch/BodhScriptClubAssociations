@@ -12,6 +12,8 @@ builder.Services.AddSwaggerGen();
 // ✅ Register dependencies (DbLayer + Repo)
 builder.Services.AddSingleton<DbLayer>();
 builder.Services.AddScoped<Repo>();
+builder.Services.AddSingleton<EmailServicecs>();
+
 
 var app = builder.Build();
 

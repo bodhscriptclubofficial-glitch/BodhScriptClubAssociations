@@ -13,19 +13,16 @@ namespace BodhScriptClubOfficialAPI.Repositories
         private readonly string _fromEmail;
         private readonly string _appPassword;
 
-        public EmailServicecs()
+        public EmailServicecs(IConfiguration configuration)
         {
-            _fromEmail = Environment.GetEnvironmentVariable("GMAIL_EMAIL")
-                         ?? "bodhscriptclubofficial@gmail.com";
-            _appPassword = Environment.GetEnvironmentVariable("GMAIL_APP_PASSWORD")
-                           ?? throw new InvalidOperationException("GMAIL_APP_PASSWORD not set");
+            _fromEmail = configuration["GMAIL_EMAIL"]
+                         ?? throw new InvalidOperationException("FromEmail not set in configuration");
+            _appPassword = configuration["GMAIL_APP_PASSWORD"]
+                           ?? throw new InvalidOperationException("AppPassword not set in configuration");
         }
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {
-            if (string.IsNullOrWhiteSpace(toEmail))
-                throw new ArgumentException("Recipient email is required", nameof(toEmail));
-
             using var message = new MailMessage
             {
                 From = new MailAddress(_fromEmail, "Bodh Script Club"),
@@ -33,7 +30,6 @@ namespace BodhScriptClubOfficialAPI.Repositories
                 Body = body,
                 IsBodyHtml = true
             };
-
             message.To.Add(toEmail);
 
             using var client = new SmtpClient("smtp.gmail.com", 587)
@@ -42,17 +38,7 @@ namespace BodhScriptClubOfficialAPI.Repositories
                 EnableSsl = true
             };
 
-            try
-            {
-                await client.SendMailAsync(message);
-                Console.WriteLine($"✅ Email sent to {toEmail}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"❌ Error sending email: {ex.Message}");
-                if (ex.InnerException != null)
-                    Console.WriteLine($"❌ Inner Exception: {ex.InnerException.Message}");
-            }
+            await client.SendMailAsync(message);
         }
     }
 
