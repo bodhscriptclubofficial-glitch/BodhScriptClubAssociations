@@ -152,11 +152,10 @@ namespace BodhScriptClubOfficialAPI.Controllers
         private readonly Repo _repo;
         private readonly BodhScriptClubOfficialAPI.Repositories.EmailServicecs _emailService;
 
-        public AuthenticationController(Repo repo, IConfiguration configuration)
+        public AuthenticationController(Repo repo, EmailServicecs emailService)
         {
             _repo = repo;
-            _emailService = new EmailServicecs(configuration); // ✅ pass IConfiguration
-
+            _emailService = emailService;
         }
 
         // ===================== LOGIN =====================
