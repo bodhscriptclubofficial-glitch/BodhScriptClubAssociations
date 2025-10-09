@@ -9,8 +9,12 @@
 </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BrevoApiClient" Version="1.0.1" />
+    <PackageReference Include="brevo_csharp" Version="1.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    <PackageReference Include="Onron.Email.Brevo" Version="1.0.1" />
+    <PackageReference Include="SendWithBrevo" Version="1.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageReference Include="System.Data.SqlClient" Version="4.9.0" />
   </ItemGroup>
